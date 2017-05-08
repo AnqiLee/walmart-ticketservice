@@ -15,10 +15,9 @@ public class Venue implements ConfirmedTicketService {
     private int capacity;
     // TODO: (optimization) maintain a list of what seats are filled (for best seat finding) and a separate
     // Map<Confirmation, Set<Integer>>
-    // TODO: (optimization) also maintain a count of how many seats are reserved (currently I'm recalculating that
-    // every time)
     private List<String> seats;
     private Map<Integer, SeatHold> holds = new HashMap<>();
+    private int reserveCount = 0;
     private IDGenerator idGenerator = new IDGenerator();
 
     public Venue(int capacity, Duration holdLength) {
@@ -42,12 +41,7 @@ public class Venue implements ConfirmedTicketService {
     }
 
     synchronized int numSeatsAvailable(Instant now) {
-        int reserved = seats
-                .stream()
-                .filter(Objects::nonNull)
-                .mapToInt(b -> 1)
-                .sum();
-        return capacity - numHeld(now) - reserved;
+        return capacity - numHeld(now) - reserveCount;
     }
 
     @Override
@@ -85,12 +79,13 @@ public class Venue implements ConfirmedTicketService {
         }
         String confirmation = Integer.toString(idGenerator.getNextID());
         holds.remove(seatHoldId);
-        int i = hold.getCount();
+        int holdCount = hold.getCount();
+        reserveCount += holdCount;
         ListIterator<String> iter = seats.listIterator();
-        while (0 < i) {
+        while (0 < holdCount) {
             if (iter.next() == null) {
                 iter.set(confirmation);
-                i--;
+                holdCount--;
             }
         }
         return confirmation;
