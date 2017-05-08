@@ -18,8 +18,7 @@ public class Venue implements ConfirmedTicketService {
     // Many methods take an Instant. This is to allow tests to explicitly set the time.
     private Duration holdLength;
     private int capacity;
-    // TODO: (optimization) maintain a list of what seats are filled (for best seat finding) and a separate
-    // Map<Confirmation, Set<Integer>>
+    private Map<String, Set<Integer>> confirmations = new HashMap<>();
     private List<String> seats;
     private Map<Integer, SeatHold> holds = new HashMap<>();
     private int reserveCount = 0;
@@ -92,13 +91,16 @@ public class Venue implements ConfirmedTicketService {
         holds.remove(seatHoldId);
         int holdCount = hold.getCount();
         reserveCount += holdCount;
+        Set<Integer> assignments = new HashSet<>();
         ListIterator<String> iter = seats.listIterator();
-        while (0 < holdCount) {
+        for (int seatNumber = 0; 0 < holdCount; seatNumber++) {
             if (iter.next() == null) {
                 iter.set(confirmation);
+                assignments.add(seatNumber);
                 holdCount--;
             }
         }
+        confirmations.put(confirmation, assignments);
         return confirmation;
     }
 
@@ -110,12 +112,12 @@ public class Venue implements ConfirmedTicketService {
         return reserveSeats(Instant.now(), seatHoldId, customerEmail);
     }
 
+    /**
+     * Constant-time operation (amortized).
+     */
     @Override
     public synchronized Set<Integer> getReservedSeats(String confirmationCode) {
-        return IntStream
-                .range(0, seats.size())
-                .filter(i -> confirmationCode.equals(seats.get(i)))
-                .boxed()
-                .collect(Collectors.toSet());
+        Set<Integer> reservations = confirmations.get(confirmationCode);
+        return reservations != null ? reservations : Collections.EMPTY_SET;
     }
 }

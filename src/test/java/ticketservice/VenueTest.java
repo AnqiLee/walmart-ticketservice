@@ -96,6 +96,9 @@ public class VenueTest {
         String c2 = v.reserveSeats(t2, s2.getID(), customer);
         Assert.assertNotNull(c2);
         Assert.assertEquals(2, v.numSeatsAvailable(t2));
+        Assert.assertTrue(
+                "The first reservation contains the best seat in the house",
+                v.getReservedSeats(c0).contains(0));
         for (int earlyReservedSeat : v.getReservedSeats(c0)) {
             for (int lateReservedSeat : v.getReservedSeats(c2)) {
                 Assert.assertTrue(
