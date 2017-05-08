@@ -6,8 +6,6 @@ Wal-Mart Labs coding challenge.
 Testing and Building
 ==
 
-TODO: check this section
-
 Test with:
 ``` shellsession
 $ ./gradlew test
@@ -48,3 +46,8 @@ Assumptions
   holds.
 * A `SeatHold` is considered expired if and only if its expiration
   time is not in the future.
+
+Lack of License
+==
+
+This software is not licensed. Do not distribute.

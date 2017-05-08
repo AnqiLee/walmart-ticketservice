@@ -8,9 +8,10 @@ import java.util.stream.IntStream;
 
 /**
  * A {@link ConfirmedTicketService} in which reservation guarantees the best available seats. Holds are "garbage
- * collected" only when necessary.
+ * collected" only when it is necessary to determine the number of available seats.
  */
 public class Venue implements ConfirmedTicketService {
+    // Many methods take an Instant. This is to allow tests to explicitly set the time.
     private Duration holdLength;
     private int capacity;
     // TODO: (optimization) maintain a list of what seats are filled (for best seat finding) and a separate
@@ -29,7 +30,7 @@ public class Venue implements ConfirmedTicketService {
     /**
      *
      * @param now the current time
-     * @return the number of seats under a hold that are non-expired.
+     * @return the number of seats under a non-expired hold.
      */
     private synchronized int numHeld(Instant now) {
         holds.entrySet().removeIf(entry -> entry.getValue().isExpired(now));
@@ -44,6 +45,9 @@ public class Venue implements ConfirmedTicketService {
         return capacity - numHeld(now) - reserveCount;
     }
 
+    /**
+     * Linear in the number holds, which is the number of seats in the venue in the worst case.
+     */
     @Override
     public int numSeatsAvailable() {
         return numSeatsAvailable(Instant.now());
@@ -61,6 +65,9 @@ public class Venue implements ConfirmedTicketService {
         return hold;
     }
 
+    /**
+     * Linear in the number of holds as it calls {@link #reserveSeats(Instant, int, String)}.
+     */
     @Override
     public SeatHold findAndHoldSeats(int numSeats, String customerEmail) {
         return findAndHoldSeats(Instant.now(), numSeats, customerEmail);
@@ -91,6 +98,9 @@ public class Venue implements ConfirmedTicketService {
         return confirmation;
     }
 
+    /**
+     * Linear in the number of seats.
+     */
     @Override
     public String reserveSeats(int seatHoldId, String customerEmail) {
         return reserveSeats(Instant.now(), seatHoldId, customerEmail);
