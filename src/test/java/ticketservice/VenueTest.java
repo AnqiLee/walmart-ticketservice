@@ -61,6 +61,9 @@ public class VenueTest {
         Duration delta = Duration.ofDays(1);
         Instant t1 = t0.plus(delta);
         Instant t2 = t1.plus(delta);
+        Instant t3 = t2.plus(delta);
+        Instant t4 = t3.plus(delta);
+        Instant t5 = t4.plus(delta);
 
         String customer = "alice@example.com";
 
@@ -96,5 +99,14 @@ public class VenueTest {
                         earlyReservedSeat < lateReservedSeat);
             }
         }
+
+        // t3
+        Assert.assertEquals(2, v.numSeatsAvailable(t3));
+
+        // t4
+        Assert.assertEquals(2, v.numSeatsAvailable(t4));
+
+        // t5
+        Assert.assertEquals(2, v.numSeatsAvailable(t5));
     }
 }
