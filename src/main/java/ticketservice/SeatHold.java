@@ -11,7 +11,7 @@ public class SeatHold {
     private int count;
     private int id;
 
-    private static IDGenerator idGenerator = new IDGenerator();
+    private static IntegerIDGenerator idGenerator = new IntegerIDGenerator();
     private String customer;
 
     boolean isExpired(Instant now) {

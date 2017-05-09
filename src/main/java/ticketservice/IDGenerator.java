@@ -4,9 +4,12 @@
 
 package ticketservice;
 
-class IDGenerator {
+abstract class IDGenerator<T> {
     private int nextID = Integer.MIN_VALUE;
-    public synchronized int getNextID() {
-        return nextID++;
+
+    public synchronized T getNextID() {
+        return makeID(nextID++);
     }
+
+    abstract T makeID(int i);
 }

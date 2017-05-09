@@ -20,7 +20,7 @@ public class Venue implements ConfirmedTicketService {
     private List<String> seats;
     private Map<Integer, SeatHold> holds = new HashMap<>();
     private int reserveCount = 0;
-    private IDGenerator idGenerator = new IDGenerator();
+    private StringIDGenerator idGenerator = new StringIDGenerator();
 
     public Venue(int capacity, Duration holdLength) {
         this.capacity = capacity;
@@ -93,7 +93,7 @@ public class Venue implements ConfirmedTicketService {
         if (hold.isExpired(now)) {
             return null;
         }
-        String confirmation = Integer.toString(idGenerator.getNextID());
+        String confirmation = idGenerator.getNextID();
         holds.remove(seatHoldId);
         int holdCount = hold.getCount();
         reserveCount += holdCount;
