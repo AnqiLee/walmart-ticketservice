@@ -127,7 +127,7 @@ public class Venue implements ConfirmedTicketService {
     public Set<Integer> getReservedSeats(String confirmationCode) {
         synchronized (confirmations) {
             Set<Integer> reservations = confirmations.get(confirmationCode);
-            return reservations != null ? reservations : Collections.EMPTY_SET;
+            return reservations != null ? reservations : Collections.emptySet();
         }
     }
 }
