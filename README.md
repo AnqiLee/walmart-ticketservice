@@ -26,7 +26,7 @@ Assumptions
   customer. If the hold is reserved, then the _n_ best seats available
   are reserved at that time. This is to fill the requirement that the
   best seats are held for the customer.
-* The seats issued to a customer are not guaranteed to be adjacent.
+* Reservation does not guarantee adjacent seats.
 * The semantics of when one seat is better than another are not
   specified, nor does `TicketService` contain a mechanism by which to
   use confirmation codes to look up what seats have been reserved. To
