@@ -46,6 +46,9 @@ Assumptions
   holds.
 * A `SeatHold` is considered expired if and only if its expiration
   time is not in the future.
+* `Venue`'s constructor takes a `Duration`. This can be used to
+  provide the expiration time for a hold in seconds or another time
+  unit.
 
 Lack of License
 ==
