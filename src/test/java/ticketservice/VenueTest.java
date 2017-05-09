@@ -28,9 +28,10 @@ public class VenueTest {
             v.findAndHoldSeats(t0,0, customer);
             Assert.fail("Requests to hold fewer than one seat should be rejected.");
         } catch (IllegalArgumentException e) {}
-        SeatHold hold = v.findAndHoldSeats(t0, capacity, customer);
-        Assert.assertNotNull(hold);
-        // TODO: more assertions on a successful hold.
+        int numRequested = capacity;
+        SeatHold hold = v.findAndHoldSeats(t0, numRequested, customer);
+        Assert.assertEquals(customer, hold.getCustomer());
+        Assert.assertEquals(numRequested, hold.getCount());
         Assert.assertEquals(
                 "After the hold has expired, all the seats are available",
                 capacity,
