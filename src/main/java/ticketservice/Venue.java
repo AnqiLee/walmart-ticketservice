@@ -28,6 +28,14 @@ public class Venue implements ConfirmedTicketService {
         this.holdLength = holdLength;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public Duration getHoldLength() {
+        return holdLength;
+    }
+
     /**
      *
      * @param now the current time
