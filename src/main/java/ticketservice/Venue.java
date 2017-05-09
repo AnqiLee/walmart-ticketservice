@@ -16,7 +16,7 @@ public class Venue implements ConfirmedTicketService {
     // Many methods take an Instant. This is to allow tests to explicitly set the time.
     private final Duration holdLength;
     private final int capacity;
-    private Map<String, Set<Integer>> confirmations = new HashMap<>();
+    private final Map<String, Set<Integer>> confirmations = new HashMap<>();
     private List<String> seats;
     private Map<Integer, SeatHold> holds = new HashMap<>();
     private int reserveCount = 0;
@@ -98,7 +98,9 @@ public class Venue implements ConfirmedTicketService {
                 holdCount--;
             }
         }
-        confirmations.put(confirmation, assignments);
+        synchronized (confirmations) {
+            confirmations.put(confirmation, assignments);
+        }
         return confirmation;
     }
 
@@ -114,8 +116,10 @@ public class Venue implements ConfirmedTicketService {
      * Constant-time operation (amortized).
      */
     @Override
-    public synchronized Set<Integer> getReservedSeats(String confirmationCode) {
-        Set<Integer> reservations = confirmations.get(confirmationCode);
-        return reservations != null ? reservations : Collections.EMPTY_SET;
+    public Set<Integer> getReservedSeats(String confirmationCode) {
+        synchronized (confirmations) {
+            Set<Integer> reservations = confirmations.get(confirmationCode);
+            return reservations != null ? reservations : Collections.EMPTY_SET;
+        }
     }
 }
