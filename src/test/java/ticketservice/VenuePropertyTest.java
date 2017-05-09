@@ -15,6 +15,9 @@ import java.util.List;
 /**
  * Property-based testing. Each {@link Event} executes against the given venue and then checks that the result is
  * correct with respect to prior events.
+ *
+ * If the events (time, principal, action -- i.e. who did what when) that the system receives are recorded, then an
+ * event sequence that causes a buggy behavior can be translated into a test via a test like this one.
  */
 public class VenuePropertyTest {
     @Test
