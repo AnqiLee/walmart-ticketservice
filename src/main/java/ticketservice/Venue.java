@@ -50,7 +50,7 @@ public class Venue implements ConfirmedTicketService {
      * Linear in the number holds, which is the number of seats in the venue in the worst case.
      */
     @Override
-    public int numSeatsAvailable() {
+    public synchronized int numSeatsAvailable() {
         return numSeatsAvailable(Instant.now());
     }
 
@@ -70,7 +70,7 @@ public class Venue implements ConfirmedTicketService {
      * Linear in the number of holds as it calls {@link #reserveSeats(Instant, int, String)}.
      */
     @Override
-    public SeatHold findAndHoldSeats(int numSeats, String customerEmail) {
+    public synchronized SeatHold findAndHoldSeats(int numSeats, String customerEmail) {
         return findAndHoldSeats(Instant.now(), numSeats, customerEmail);
     }
 
@@ -108,7 +108,7 @@ public class Venue implements ConfirmedTicketService {
      * Linear in the number of seats.
      */
     @Override
-    public String reserveSeats(int seatHoldId, String customerEmail) {
+    public synchronized String reserveSeats(int seatHoldId, String customerEmail) {
         return reserveSeats(Instant.now(), seatHoldId, customerEmail);
     }
 
