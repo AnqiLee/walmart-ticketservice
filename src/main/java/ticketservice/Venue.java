@@ -7,8 +7,6 @@ package ticketservice;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * A {@link ConfirmedTicketService} in which reservation guarantees the best available seats. Holds are "garbage
@@ -16,8 +14,8 @@ import java.util.stream.IntStream;
  */
 public class Venue implements ConfirmedTicketService {
     // Many methods take an Instant. This is to allow tests to explicitly set the time.
-    private Duration holdLength;
-    private int capacity;
+    private final Duration holdLength;
+    private final int capacity;
     private Map<String, Set<Integer>> confirmations = new HashMap<>();
     private List<String> seats;
     private Map<Integer, SeatHold> holds = new HashMap<>();
